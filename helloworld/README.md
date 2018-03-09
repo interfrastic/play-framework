@@ -209,21 +209,76 @@ dist
 
 1. Use the **Import Project** option.
 1. Browse to the `build.sbt` file and press **Open**.
-1. Choose the following options:
-   * **Group modules: &#x2022; using explicit module groups &#x25e6; using qualified names**
-   * **Download: &#x2611; Library sources &#x2610; sbt sources**
-   * **&#x2611; Use sbt shell for build and import (requires sbt 0.13.5+)**
-   * **Project JDK:** 1.8
-   * **Project format:** .idea (directory based)
-   * **Global sbt settings**
-      * **JVM**
-         * **&#x2022; From project JDK**
-         * **&#x25e6; Custom**
-      * **JVM Options**
-         * **Maximum heap size, MB** 768
-         * **VM parameters** _[leave blank]_
-      * **Launcher (sbt-launch.jar)**
-         * **&#x2022; Bundled**
-         * **&#x25e6; Custom**
-1. In the **Project** pane, right-click **build.sbt** and select **Run Play 2 App**.
-1. In the **Play 2** drop-down in the toolbar, select **Edit Configurations&hellip;**.
+1. Choose the following options and press **OK**:
+   * Group modules
+      * Using explicit module groups: **&#x2610;**
+      * Using qualified names: **&#x2610;**
+   * Download
+      * Library sources: **&#x2612;**
+      * Sbt sources: **&#x2610;**
+   * Use sbt shell for build and import (requires sbt 0.13.5+): **&#x2612;**
+   * Project JDK: **1.8**
+   * Project format: **.idea (directory based)**
+   * Global sbt settings
+      * JVM
+         * From project JDK: **&#x2612;**
+         * Custom: **&#x2610;**
+      * JVM Options
+         * Maximum heap size, MB: **768**
+         * VM parameters: _[leave blank]_
+      * Launcher (sbt-launch.jar)
+         * Bundled: **&#x2612;**
+         * Custom: **&#x2610;**
+1.  If you see the message **Unregistered VCS root detected**, press
+    **Add root**.
+1.  If you see the mesage **Unlinked Gradle project?**, do not choose the
+    **Import Gradle project** option; use the **press here** option to suppress
+    the message for the project.
+1.  In the **Project** pane, right-click **build.sbt** and select **Run Play 2
+    App**.
+1.  In the **Play 2** drop-down in the toolbar, select **Edit
+    Configurations&hellip;**, choose the following options, and press **OK**:
+   *   Name: **Play 2**
+   *   Share: **&#x2610;**
+   *   Single instance only: **&#x2610;**
+   *   Open in browser
+      * Open in browser after compilation: **&#x2612;**
+      * Url to Open: **http\://localhost:9000**
+   *   JVM Options: **-Xms512M -Xmx1024M -Xss1M -XX:+CMSClassUnloadingEnabled**
+       _[remove -XX:MaxPermSize=256M]_
+   *   Environment variables: _[leave blank]_
+   *   Use non-default Play 2 install dir: **&#x2610;**
+   *   Debug port: **9999**
+   *   Enable auto-reload: **&#x2610;**
+   *   Play2 Module: **root**
+   *   Before launch: Build, Activate tool window: **Build**
+   *   Show this page: **&#x2610;**
+   *   Activate tool window: **&#x2612;**
+1.  In the **Play 2** drop-down in the toolbar, select **Save 'Play 2'
+    Configuration**.
+1.  Close the project.
+
+### Commit Again After Importing into IntelliJ
+
+Be sure to commit the project immediately after importing it into IntelliJ in
+order to provide a known good baseline to which the project can be
+compared&mdash;and, if necessary, reverted&mdash;later:
+
+```console
+$ git add helloworld
+$ git commit
+$ git commit
+[master 0afaf76] Import helloworld with sbt shell for build
+ 11 files changed, 568 insertions(+)
+ create mode 100644 helloworld/.gitignore
+ create mode 100644 helloworld/.idea/compiler.xml
+ create mode 100644 helloworld/.idea/misc.xml
+ create mode 100644 helloworld/.idea/modules.xml
+ create mode 100644 helloworld/.idea/modules/root-build.iml
+ create mode 100644 helloworld/.idea/modules/root.iml
+ create mode 100644 helloworld/.idea/play2_project_settings.xml
+ create mode 100644 helloworld/.idea/play2_settings.xml
+ create mode 100644 helloworld/.idea/sbt.xml
+ create mode 100644 helloworld/.idea/scala_compiler.xml
+ create mode 100644 helloworld/.idea/vcs.xml
+```
