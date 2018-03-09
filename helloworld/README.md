@@ -208,11 +208,8 @@ dist
 ### Import into IntelliJ
 
 1.  Use the **Import Project** option.
-
 1.  Browse to the `build.sbt` file and press **Open**.
-
 1.  Choose the following options and press **OK**:
-
     * Group modules
       * Using explicit module groups: **&#x2610;**
       * Using qualified names: **&#x2610;**
@@ -232,52 +229,33 @@ dist
       * Launcher (sbt-launch.jar)
         * Bundled: **&#x2612;**
         * Custom: **&#x2610;**
-
 1.  If you see the message **Unregistered VCS root detected**, press
     **Add root**.
-
 1.  If you see the mesage **Unlinked Gradle project?**, do not choose the
     **Import Gradle project** option; use the **press here** option to suppress
     the message for the project.
-
 1.  In the **Project** pane, right-click **build.sbt** and select **Run Play 2
     App**.
-
 1.  In the **Play 2** drop-down in the toolbar, select **Edit
     Configurations&hellip;**, choose the following options, and press **OK**:
-
     *   Name: **Play 2**
-
     *   Share: **&#x2610;**
-
     *   Single instance only: **&#x2610;**
-
     *   Open in browser
         * Open in browser after compilation: **&#x2612;**
         * Url to Open: **http\://localhost:9000**
-
     *   JVM Options: **-Xms512M -Xmx1024M -Xss1M -XX:+CMSClassUnloadingEnabled**
         _[remove -XX:MaxPermSize=256M]_
-
     *   Environment variables: _[leave blank]_
-
     *   Use non-default Play 2 install dir: **&#x2610;**
-
     *   Debug port: **9999**
-
     *   Enable auto-reload: **&#x2610;**
-
     *   Play2 Module: **root**
-
     *   Before launch: Build, Activate tool window: **Build**
-
     *   Show this page: **&#x2610;**
-
     *   Activate tool window: **&#x2612;**
-
 1.  In the **Play 2** drop-down in the toolbar, select **Save 'Play 2'
     Configuration**.
-
 1.  Close the project.
 
 ### Commit Again After Importing into IntelliJ
