@@ -92,7 +92,7 @@ remember to clean up the unneeded `target` directory after running `sbt new`:
 $ rm -Rf target
 ```
 
-### Commit Before Importing
+### Commit Before Importing into IntelliJ
 
 Be sure to commit the project immediately after creation in case the attempt to
 import it into IntelliJ breaks the build configuration:
@@ -129,7 +129,7 @@ $ git commit
  create mode 100644 helloworld/test/controllers/HomeControllerTest.java
 ```
 
-### Add `.gitignore` Before Importing
+### Add `.gitignore` Before Importing into IntelliJ
 
 To ensure that transient Play and IntelliJ files are not committed to Git, add
 a `.gitignore` file consisting of the recommended IntelliJ and Play defaults to
@@ -204,3 +204,26 @@ tmp
 dist
 .cache
 ```
+
+### Import into IntelliJ
+
+1. Use the **Import Project** option.
+1. Browse to the `build.sbt` file and press **Open**.
+1. Choose the following options:
+   * **Group modules: &#x2022; using explicit module groups &#x25e6; using qualified names**
+   * **Download: &#x2611; Library sources &#x2610; sbt sources**
+   * **&#x2611; Use sbt shell for build and import (requires sbt 0.13.5+)**
+   * **Project JDK:** 1.8
+   * **Project format:** .idea (directory based)
+   * **Global sbt settings**
+      * **JVM**
+         * **&#x2022; From project JDK**
+         * **&#x25e6; Custom**
+      * **JVM Options**
+         * **Maximum heap size, MB** 768
+         * **VM parameters** _[leave blank]_
+      * **Launcher (sbt-launch.jar)**
+         * **&#x2022; Bundled**
+         * **&#x25e6; Custom**
+1. In the **Project** pane, right-click **build.sbt** and select **Run Play 2 App**.
+1. In the **Play 2** drop-down in the toolbar, select **Edit Configurations&hellip;**.
