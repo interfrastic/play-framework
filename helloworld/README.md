@@ -240,7 +240,7 @@ dist
 1.  In the __Project__ pane, right-click __build.sbt__ and select __Run Play 2
     App__.
 1.  In the __Play 2__ drop-down in the toolbar, select __Edit
-    Configurations&hellip;__, choose the following options, and press __OK__:
+    Configurations…__, choose the following options, and press __OK__:
     *   Name: __Play 2__
     *   Share: ___unchecked___
     *   Single instance only: ___unchecked___
@@ -265,7 +265,7 @@ dist
 
 Be sure to commit the project immediately after importing it into IntelliJ in
 order to provide a known good baseline to which the project can be
-compared&mdash;and, if necessary, reverted&mdash;later:
+compared—and, if necessary, reverted—later:
 
 ```console
 $ git add helloworld
