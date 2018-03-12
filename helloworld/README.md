@@ -92,6 +92,11 @@ remember to clean up the unneeded `target` directory after running `sbt new`:
 $ rm -Rf target
 ```
 
+### Set Up GNU Privacy Guard (GPG) Before Committing
+
+If you would like your GitHub commits to appear as “verified,” then you must set
+up GNU Privacy Guard (GPG), as described in the file `GPG.md` in this directory.
+
 ### Commit Before Importing into IntelliJ
 
 Be sure to commit the project immediately after creation in case the attempt to
@@ -207,55 +212,53 @@ dist
 
 ### Import into IntelliJ
 
-1.  Use the **Import Project** option.
-1.  Browse to the `build.sbt` file and press **Open**.
-1.  Choose the following options and press **OK**:
-    * Group modules
-      * Using explicit module groups: **&#x2610;**
-      * Using qualified names: **&#x2610;**
+1.  Use the __Import Project__ option.
+1.  Browse to the `build.sbt` file and press __Open__.
+1.  Choose the following options and press __OK__:
+    * Group modules: ___Using explicit module groups___
     * Download
-      * Library sources: **&#x2612;**
-      * Sbt sources: **&#x2610;**
-    * Use sbt shell for build and import (requires sbt 0.13.5+): **&#x2612;**
-    * Project JDK: **1.8**
-    * Project format: **.idea (directory based)**
+      * Library sources: ___checked___
+      * Sbt sources: ___unchecked___
+    * Use sbt shell for build and import (requires sbt 0.13.5+): ___checked___
+    * Project JDK: __1.8__
+    * Project format: __.idea (directory based)__
     * Global sbt settings
       * JVM
-        * From project JDK: **&#x2612;**
-        * Custom: **&#x2610;**
+        * From project JDK: ___checked___
+        * Custom: ___unchecked___
       * JVM Options
-        * Maximum heap size, MB: **768**
-        * VM parameters: _[leave blank]_
+        * Maximum heap size, MB: __768__
+        * VM parameters: ___\[leave blank\]___
       * Launcher (sbt-launch.jar)
-        * Bundled: **&#x2612;**
-        * Custom: **&#x2610;**
-1.  If you see the message **Unregistered VCS root detected**, press
-    **Add root**.
-1.  If you see the mesage **Unlinked Gradle project?**, do not choose the
-    **Import Gradle project** option; use the **press here** option to suppress
+        * Bundled: ___checked___
+        * Custom: ___unchecked___
+1.  If you see the message __Unregistered VCS root detected__, press
+    __Add root__.
+1.  If you see the mesage __Unlinked Gradle project?__, do not choose the
+    __Import Gradle project__ option; use the __press here__ option to suppress
     the message for the project.
-1.  In the **Project** pane, right-click **build.sbt** and select **Run Play 2
-    App**.
-1.  In the **Play 2** drop-down in the toolbar, select **Edit
-    Configurations&hellip;**, choose the following options, and press **OK**:
-    *   Name: **Play 2**
-    *   Share: **&#x2610;**
-    *   Single instance only: **&#x2610;**
+1.  In the __Project__ pane, right-click __build.sbt__ and select __Run Play 2
+    App__.
+1.  In the __Play 2__ drop-down in the toolbar, select __Edit
+    Configurations&hellip;__, choose the following options, and press __OK__:
+    *   Name: __Play 2__
+    *   Share: ___unchecked___
+    *   Single instance only: ___unchecked___
     *   Open in browser
-        * Open in browser after compilation: **&#x2612;**
-        * Url to Open: **http\://localhost:9000**
-    *   JVM Options: **-Xms512M -Xmx1024M -Xss1M -XX:+CMSClassUnloadingEnabled**
-        _[remove -XX:MaxPermSize=256M]_
-    *   Environment variables: _[leave blank]_
-    *   Use non-default Play 2 install dir: **&#x2610;**
-    *   Debug port: **9999**
-    *   Enable auto-reload: **&#x2610;**
-    *   Play2 Module: **root**
-    *   Before launch: Build, Activate tool window: **Build**
-    *   Show this page: **&#x2610;**
-    *   Activate tool window: **&#x2612;**
-1.  In the **Play 2** drop-down in the toolbar, select **Save 'Play 2'
-    Configuration**.
+        * Open in browser after compilation: ___checked___
+        * Url to Open: __http\://localhost:9000__
+    *   JVM Options: __-Xms512M -Xmx1024M -Xss1M -XX:+CMSClassUnloadingEnabled__
+        ___\[remove -XX:MaxPermSize=256M\]___
+    *   Environment variables: ___\[leave blank\]___
+    *   Use non-default Play 2 install dir: ___unchecked___
+    *   Debug port: __9999__
+    *   Enable auto-reload: ___unchecked___
+    *   Play2 Module: __root__
+    *   Before launch: Build, Activate tool window: __Build__
+    *   Show this page: ___unchecked___
+    *   Activate tool window: ___checked___
+1.  In the __Play 2__ drop-down in the toolbar, select __Save 'Play 2'
+    Configuration__.
 1.  Close the project.
 
 ### Commit Again After Importing into IntelliJ
@@ -266,7 +269,6 @@ compared&mdash;and, if necessary, reverted&mdash;later:
 
 ```console
 $ git add helloworld
-$ git commit
 $ git commit
 [master 0afaf76] Import helloworld with sbt shell for build
  11 files changed, 568 insertions(+)
