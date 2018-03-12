@@ -63,3 +63,7 @@ target
 tmp
 dist
 .cache
+
+# Ignore generated Ebean evolutions.
+
+/conf/evolutions
