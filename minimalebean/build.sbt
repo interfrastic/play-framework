@@ -9,4 +9,4 @@ scalaVersion := "2.12.4"
 
 libraryDependencies += guice
 libraryDependencies += javaJdbc
-libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.41"
+libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.46"

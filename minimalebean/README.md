@@ -40,12 +40,12 @@ connect to a MySQL database through the MySQL Connector/J JDBC driver.
       lazy val root = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
       ```
       
-   1. Add the following lines at the end, replacing `5.1.41` with the current
+   1. Add the following lines at the end, replacing `5.1.46` with the current
       connector version:
 
       ```scala
       libraryDependencies += javaJdbc
-      libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.41"
+      libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.46"
       ```
 
    1. Save the file. If you see a __build.sbt was changed__ message, press
