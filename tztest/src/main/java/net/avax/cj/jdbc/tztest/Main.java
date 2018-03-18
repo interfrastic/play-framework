@@ -1,6 +1,13 @@
 package net.avax.cj.jdbc.tztest;
 
+// Before running test for first time:
+//
+// CREATE DATABASE tztest;
+// CREATE USER 'tztest'@'localhost' IDENTIFIED BY 'insecure';
+// GRANT ALL PRIVILEGES ON tztest.* TO 'tztest'@'localhost' WITH GRANT OPTION;
+
 import java.sql.*;
+import java.util.TimeZone;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
@@ -14,20 +21,36 @@ public class Main {
         }
 
         Connection conn = DriverManager.getConnection(url);
-
-        // Create Oracle DatabaseMetaData object
         DatabaseMetaData meta = conn.getMetaData();
+        Statement s = conn.createStatement();
+        ResultSet rs;
 
-        // gets driver info:
+        if (!s.execute("SELECT @@time_zone;")
+                || !(rs = s.getResultSet()).next()) {
+            throw new AssertionError("Failed to select server time zone");
+        }
+
+        String serverTimeZone = rs.getString(1);
+
+        String clientTimeZone = TimeZone.getDefault().toZoneId().toString();
+
         System.out.println("jdbcDriverVersion:                   "
                 + meta.getDriverVersion());
         System.out.println("useLegacyDatetimeCode:               "
                 + useLegacyDatetimeCode);
+        System.out.println("serverTimeZone:                      "
+                + serverTimeZone);
+        System.out.println("clientTimeZone:                      "
+                + clientTimeZone);
 
-        // DROP TABLE IF EXISTS tztest;
-        // CREATE TABLE tztest (id INT(11) NOT NULL AUTO_INCREMENT, test_date
-        // DATE NOT NULL, test_datetime DATETIME(6) NOT NULL, test_timestamp
-        // TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (id));
+        s = conn.createStatement();
+
+        s.execute("DROP TABLE IF EXISTS tztest;");
+
+        s.execute("CREATE TABLE tztest (id INT(11) NOT NULL AUTO_INCREMENT,"
+                + " test_date DATE NOT NULL, test_datetime DATETIME(6) NOT"
+                + " NULL, test_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
+                + " PRIMARY KEY (id));");
 
         long insertedTime = System.currentTimeMillis();
 
@@ -45,7 +68,7 @@ public class Main {
 
         int rowCount = ps.executeUpdate();
 
-        ResultSet rs = ps.getGeneratedKeys();
+        rs = ps.getGeneratedKeys();
 
         if (rowCount != 1 || !rs.next()) {
             throw new AssertionError("Failed to insert row");
