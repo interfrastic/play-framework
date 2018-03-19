@@ -25,7 +25,7 @@ public class Main {
         Statement s = conn.createStatement();
         ResultSet rs;
 
-        if (!s.execute("SELECT @@time_zone;")
+        if (!s.execute("SELECT @@time_zone")
                 || !(rs = s.getResultSet()).next()) {
             throw new AssertionError("Failed to select server time zone");
         }
@@ -34,37 +34,56 @@ public class Main {
 
         String clientTimeZone = TimeZone.getDefault().toZoneId().toString();
 
-        System.out.println("jdbcDriverVersion:                   "
+        System.out.println("jdbcDriverVersion:           "
                 + meta.getDriverVersion());
-        System.out.println("useLegacyDatetimeCode:               "
+        System.out.println("useLegacyDatetimeCode:       "
                 + useLegacyDatetimeCode);
-        System.out.println("serverTimeZone:                      "
+        System.out.println("serverTimeZone:              "
                 + serverTimeZone);
-        System.out.println("clientTimeZone:                      "
+        System.out.println("clientTimeZone:              "
                 + clientTimeZone);
 
         s = conn.createStatement();
 
-        s.execute("DROP TABLE IF EXISTS tztest;");
+        s.execute("DROP TABLE IF EXISTS tztest");
 
-        s.execute("CREATE TABLE tztest (id INT(11) NOT NULL AUTO_INCREMENT,"
-                + " test_date DATE NOT NULL, test_datetime DATETIME(6) NOT"
-                + " NULL, test_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
-                + " PRIMARY KEY (id));");
+        s.execute("CREATE TABLE tztest (\n"
+                + "    id INT(11) NOT NULL AUTO_INCREMENT,\n"
+                + "    date_as_date DATE NOT NULL,\n"
+                + "    datetime_as_timestamp DATETIME(6) NOT NULL,\n"
+                + "    datetime_as_string DATETIME(6) NOT NULL,\n"
+                + "    timestamp_from_client TIMESTAMP(6) NOT NULL,\n"
+                + "    timestamp_from_server TIMESTAMP(6)\n"
+                + "        DEFAULT CURRENT_TIMESTAMP(6),\n"
+                + "    PRIMARY KEY (id)\n"
+                + ")");
 
-        long insertedTime = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        Timestamp timestamp = new Timestamp(now);
 
-        PreparedStatement ps = conn.prepareStatement("INSERT INTO tztest"
-                        + " (test_date, test_datetime, test_timestamp) VALUES"
-                        + " (?, ?, NULL)",
+        Date insertedDateAsDate = date;
+        String insertedDatetimeAsString = timestamp.toString();
+        Timestamp insertedDatetimeAsTimestamp = timestamp;
+        Timestamp insertedTimestampFromClient = timestamp;
+
+        PreparedStatement ps = conn.prepareStatement("INSERT INTO tztest(\n"
+                        + "    date_as_date,\n"
+                        + "    datetime_as_timestamp,\n"
+                        + "    datetime_as_string,\n"
+                        + "    timestamp_from_client\n"
+                        + ") VALUES (\n"
+                        + "    ?,\n"
+                        + "    ?,\n"
+                        + "    ?,\n"
+                        + "    ?\n"
+                        + ")",
                 Statement.RETURN_GENERATED_KEYS);
 
-        String insertedDateAsString = new Date(insertedTime).toString();
-        String insertedDatetimeAsString = new Timestamp(insertedTime)
-                .toString();
-
-        ps.setString(1, insertedDateAsString);
-        ps.setString(2, insertedDatetimeAsString);
+        ps.setDate(1, insertedDateAsDate);
+        ps.setTimestamp(2, insertedDatetimeAsTimestamp);
+        ps.setString(3, insertedDatetimeAsString);
+        ps.setTimestamp(4, insertedTimestampFromClient);
 
         int rowCount = ps.executeUpdate();
 
@@ -77,16 +96,24 @@ public class Main {
         int insertedRowId = rs.getInt(1);
 
         System.out.println();
-        System.out.println("insertedRowId:                       "
+        System.out.println("insertedRowId:               "
                 + insertedRowId);
-        System.out.println("insertedDateAsString:                "
-                + insertedDateAsString);
-        System.out.println("insertedDatetimeAsString:            "
+        System.out.println("insertedDateAsDate:          "
+                + insertedDateAsDate);
+        System.out.println("insertedDatetimeAsTimestamp: "
+                + insertedDatetimeAsTimestamp);
+        System.out.println("insertedDatetimeAsString:    "
                 + insertedDatetimeAsString);
-        System.out.println("insertedTimestamp:                   NULL");
+        System.out.println("insertedTimestampFromClient: "
+                + insertedTimestampFromClient);
 
-        ps = conn.prepareStatement("SELECT test_date, test_datetime,"
-                + " test_timestamp FROM tztest WHERE id = ?");
+        ps = conn.prepareStatement("SELECT\n"
+                + "    date_as_date,\n"
+                + "    datetime_as_timestamp,\n"
+                + "    datetime_as_string,\n"
+                + "    timestamp_from_client,\n"
+                + "    timestamp_from_server\n"
+                + "FROM tztest WHERE id = ?");
 
         ps.setInt(1, insertedRowId);
 
@@ -94,65 +121,22 @@ public class Main {
             throw new AssertionError("Failed to select inserted row");
         }
 
-        String selectedInsertedDateAsString = rs.getString(1);
-        String selectedInsertedDatetimeAsString = rs.getString(2);
-        String selectedInsertedTimestampAsString = rs.getString(3);
+        Date selectedDateAsDate = rs.getDate(1);
+        Timestamp selectedDatetimeAsTimestamp = rs.getTimestamp(2);
+        String selectedDatetimeAsString = rs.getString(3);
+        Timestamp selectedTimestampFromClient = rs.getTimestamp(4);
+        Timestamp selectedTimestampFromServer = rs.getTimestamp(5);
 
         System.out.println();
-        System.out.println("selectedInsertedDateAsString:        "
-                + selectedInsertedDateAsString);
-        System.out.println("selectedInsertedDatetimeAsString:    "
-                + selectedInsertedDatetimeAsString);
-        System.out.println("selectedInsertedTimestampAsString:   "
-                + selectedInsertedTimestampAsString);
-
-        long updatedTime = System.currentTimeMillis();
-
-        Date updatedDateAsDate = new Date(updatedTime);
-        Timestamp updatedDatetimeAsTimestamp = new Timestamp(updatedTime);
-        Timestamp updatedTimestampAsTimestamp = new Timestamp(updatedTime);
-
-        ps = conn.prepareStatement("UPDATE tztest SET test_date = ?,"
-                + " test_datetime = ?, test_timestamp = ? WHERE id = ?");
-
-        ps.setDate(1, updatedDateAsDate);
-        ps.setTimestamp(2, updatedDatetimeAsTimestamp);
-        ps.setTimestamp(3, updatedTimestampAsTimestamp);
-        ps.setInt(4, insertedRowId);
-
-        rowCount = ps.executeUpdate();
-
-        if (rowCount != 1) {
-            throw new AssertionError("Failed to update row");
-        }
-
-        System.out.println();
-        System.out.println("updatedDateAsDate:                   "
-                + updatedDateAsDate);
-        System.out.println("updatedDatetimeAsTimestamp:          "
-                + updatedDatetimeAsTimestamp);
-        System.out.println("updatedTimestampAsTimestamp:         "
-                + updatedTimestampAsTimestamp);
-
-        ps = conn.prepareStatement("SELECT test_date, test_datetime,"
-                + " test_timestamp FROM tztest WHERE id = ?");
-
-        ps.setInt(1, insertedRowId);
-
-        if (!ps.execute() || !(rs = ps.getResultSet()).next()) {
-            throw new AssertionError("Failed to select updated row");
-        }
-
-        Date selectedUpdatedDateAsDate = rs.getDate(1);
-        Timestamp selectedUpdatedDatetimeAsTimestamp = rs.getTimestamp(2);
-        Timestamp selectedUpdatedTimestampAsTimestamp = rs.getTimestamp(3);
-
-        System.out.println();
-        System.out.println("selectedUpdatedDateAsDate:           "
-                + selectedUpdatedDateAsDate);
-        System.out.println("selectedUpdatedDatetimeAsTimestamp:  "
-                + selectedUpdatedDatetimeAsTimestamp);
-        System.out.println("selectedUpdatedTimestampAsTimestamp: "
-                + selectedUpdatedTimestampAsTimestamp);
+        System.out.println("selectedDateAsDate:          "
+                + selectedDateAsDate);
+        System.out.println("selectedDatetimeAsTimestamp: "
+                + selectedDatetimeAsTimestamp);
+        System.out.println("selectedDatetimeAsString:    "
+                + selectedDatetimeAsString);
+        System.out.println("selectedTimestampFromClient: "
+                + selectedTimestampFromClient);
+        System.out.println("selectedTimestampFromServer: "
+                + selectedTimestampFromServer);
     }
 }
