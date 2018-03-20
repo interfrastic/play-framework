@@ -1,3 +1,8 @@
+// Test case for MySQL Bug #90150: getString() retrieves bad DATETIME value
+// when client, server time zones differ:
+//
+// https://bugs.mysql.com/bug.php?id=90150
+
 package net.avax.cj.jdbc.tztest;
 
 // Before running test for first time:
@@ -11,132 +16,61 @@ import java.util.TimeZone;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
-        Boolean useLegacyDatetimeCode = false;
+        Connection c = DriverManager.getConnection("jdbc:mysql://localhost"
+                + "/tztest?user=tztest&password=insecure&useSSL=false"
+                + "&useLegacyDatetimeCode=false");
+        String jdbcDriverVersion = c.getMetaData().getDriverVersion();
+        Statement s = c.createStatement();
 
-        String url = "jdbc:mysql://localhost/tztest?user=tztest"
-                + "&password=insecure&useSSL=false";
+        s.execute("SELECT @@time_zone");
 
-        if (useLegacyDatetimeCode != null) {
-            url += "&useLegacyDatetimeCode=" + useLegacyDatetimeCode;
-        }
+        ResultSet rs = s.getResultSet();
 
-        Connection conn = DriverManager.getConnection(url);
-        DatabaseMetaData meta = conn.getMetaData();
-        Statement s = conn.createStatement();
-        ResultSet rs;
-
-        if (!s.execute("SELECT @@time_zone")
-                || !(rs = s.getResultSet()).next()) {
-            throw new AssertionError("Failed to select server time zone");
-        }
+        rs.next();
 
         String serverTimeZone = rs.getString(1);
-
         String clientTimeZone = TimeZone.getDefault().toZoneId().toString();
 
-        System.out.println("jdbcDriverVersion:           "
-                + meta.getDriverVersion());
-        System.out.println("useLegacyDatetimeCode:       "
-                + useLegacyDatetimeCode);
-        System.out.println("serverTimeZone:              "
-                + serverTimeZone);
-        System.out.println("clientTimeZone:              "
-                + clientTimeZone);
+        System.out.println("jdbcDriverVersion:    " + jdbcDriverVersion);
+        System.out.println("serverTimeZone:       " + serverTimeZone);
+        System.out.println("clientTimeZone:       " + clientTimeZone);
 
-        s = conn.createStatement();
-
+        s = c.createStatement();
         s.execute("DROP TABLE IF EXISTS tztest");
+        s.execute("CREATE TABLE tztest (id INTEGER NOT NULL AUTO_INCREMENT,"
+                + " as_timestamp DATETIME(3) NOT NULL,"
+                + " as_string DATETIME(3) NOT NULL, PRIMARY KEY (id))");
 
-        s.execute("CREATE TABLE tztest (\n"
-                + "    id INT(11) NOT NULL AUTO_INCREMENT,\n"
-                + "    date_as_date DATE NOT NULL,\n"
-                + "    datetime_as_timestamp DATETIME(6) NOT NULL,\n"
-                + "    datetime_as_string DATETIME(6) NOT NULL,\n"
-                + "    timestamp_from_client TIMESTAMP(6) NOT NULL,\n"
-                + "    timestamp_from_server TIMESTAMP(6)\n"
-                + "        DEFAULT CURRENT_TIMESTAMP(6),\n"
-                + "    PRIMARY KEY (id)\n"
-                + ")");
-
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-        Timestamp timestamp = new Timestamp(now);
-
-        Date insertedDateAsDate = date;
-        String insertedDatetimeAsString = timestamp.toString();
-        Timestamp insertedDatetimeAsTimestamp = timestamp;
-        Timestamp insertedTimestampFromClient = timestamp;
-
-        PreparedStatement ps = conn.prepareStatement("INSERT INTO tztest(\n"
-                        + "    date_as_date,\n"
-                        + "    datetime_as_timestamp,\n"
-                        + "    datetime_as_string,\n"
-                        + "    timestamp_from_client\n"
-                        + ") VALUES (\n"
-                        + "    ?,\n"
-                        + "    ?,\n"
-                        + "    ?,\n"
-                        + "    ?\n"
-                        + ")",
+        Timestamp storedAsTimestamp = new Timestamp(System.currentTimeMillis());
+        String storedAsString = storedAsTimestamp.toString();
+        PreparedStatement ps = c.prepareStatement("INSERT INTO tztest("
+                        + "as_timestamp, as_string) VALUES (?,?)",
                 Statement.RETURN_GENERATED_KEYS);
 
-        ps.setDate(1, insertedDateAsDate);
-        ps.setTimestamp(2, insertedDatetimeAsTimestamp);
-        ps.setString(3, insertedDatetimeAsString);
-        ps.setTimestamp(4, insertedTimestampFromClient);
-
-        int rowCount = ps.executeUpdate();
+        ps.setTimestamp(1, storedAsTimestamp);
+        ps.setString(2, storedAsString);
+        ps.executeUpdate();
 
         rs = ps.getGeneratedKeys();
+        rs.next();
 
-        if (rowCount != 1 || !rs.next()) {
-            throw new AssertionError("Failed to insert row");
-        }
+        int id = rs.getInt(1);
 
-        int insertedRowId = rs.getInt(1);
+        System.out.println("id:                   " + id);
+        System.out.println("storedAsTimestamp:    " + storedAsTimestamp);
+        System.out.println("storedAsString:       " + storedAsString);
 
-        System.out.println();
-        System.out.println("insertedRowId:               "
-                + insertedRowId);
-        System.out.println("insertedDateAsDate:          "
-                + insertedDateAsDate);
-        System.out.println("insertedDatetimeAsTimestamp: "
-                + insertedDatetimeAsTimestamp);
-        System.out.println("insertedDatetimeAsString:    "
-                + insertedDatetimeAsString);
-        System.out.println("insertedTimestampFromClient: "
-                + insertedTimestampFromClient);
+        ps = c.prepareStatement("SELECT as_timestamp, as_string FROM tztest"
+                + " WHERE id = ?");
+        ps.setInt(1, id);
+        ps.execute();
+        rs = ps.getResultSet();
+        rs.next();
 
-        ps = conn.prepareStatement("SELECT\n"
-                + "    date_as_date,\n"
-                + "    datetime_as_timestamp,\n"
-                + "    datetime_as_string,\n"
-                + "    timestamp_from_client,\n"
-                + "    timestamp_from_server\n"
-                + "FROM tztest WHERE id = ?");
+        Timestamp retrievedAsTimestamp = rs.getTimestamp(1);
+        String retrievedAsString = rs.getString(2);
 
-        ps.setInt(1, insertedRowId);
-
-        if (!ps.execute() || !(rs = ps.getResultSet()).next()) {
-            throw new AssertionError("Failed to select inserted row");
-        }
-
-        Date selectedDateAsDate = rs.getDate(1);
-        Timestamp selectedDatetimeAsTimestamp = rs.getTimestamp(2);
-        String selectedDatetimeAsString = rs.getString(3);
-        Timestamp selectedTimestampFromClient = rs.getTimestamp(4);
-        Timestamp selectedTimestampFromServer = rs.getTimestamp(5);
-
-        System.out.println();
-        System.out.println("selectedDateAsDate:          "
-                + selectedDateAsDate);
-        System.out.println("selectedDatetimeAsTimestamp: "
-                + selectedDatetimeAsTimestamp);
-        System.out.println("selectedDatetimeAsString:    "
-                + selectedDatetimeAsString);
-        System.out.println("selectedTimestampFromClient: "
-                + selectedTimestampFromClient);
-        System.out.println("selectedTimestampFromServer: "
-                + selectedTimestampFromServer);
+        System.out.println("retrievedAsTimestamp: " + retrievedAsTimestamp);
+        System.out.println("retrievedAsString:    " + retrievedAsString);
     }
 }
