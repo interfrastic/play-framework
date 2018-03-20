@@ -7,17 +7,40 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+
+    // For MariaDB Connector/J development versions.
+
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
 }
 
 dependencies {
-    // Delivery+ version as of March 16, 2018:
+
+    // MySQL Connector/J Delivery+ version as of March 16, 2018:
+
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.18'
-    // Latest GA version as of March 16, 2018:
+
+    // MySQL Connector/J latest GA version as of March 16, 2018:
+
 //    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.46'
-    // Latest development version as of March 16, 2018:
+
+    // MySQL Connector/J  latest development version as of March 16, 2018:
+
 //    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.9-rc'
-    // Earlier development versions:
+
+    // MySQL Connector/J  earlier development versions:
+
 //    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.8-dmr'
 //    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.7-dmr'
+
+    // MariaDB Connector/J latest GA version as of March 20, 2018:
+
+//    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.3'
+
+    // MariaDB Connector/J latest development version as of March 20, 2018:
+
+//    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.3.0-SNAPSHOT'
+
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
