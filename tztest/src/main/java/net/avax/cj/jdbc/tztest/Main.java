@@ -11,10 +11,15 @@ import java.util.TimeZone;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
+        Boolean noDatetimeStringSync = true;
         Boolean useLegacyDatetimeCode = false;
 
         String url = "jdbc:mysql://localhost/tztest?user=tztest"
                 + "&password=insecure&useSSL=false";
+
+        if (noDatetimeStringSync != null) {
+            url += "&noDatetimeStringSync=" + noDatetimeStringSync;
+        }
 
         if (useLegacyDatetimeCode != null) {
             url += "&useLegacyDatetimeCode=" + useLegacyDatetimeCode;
