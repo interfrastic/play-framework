@@ -18,4 +18,17 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-play-enhancer" % "1.1.0")
 
 // Play Ebean support, to enable, uncomment this line, and enable in your build.sbt using
 // enablePlugins(PlayEbean).
-// addSbtPlugin("com.typesafe.sbt" % "sbt-play-ebean" % "3.0.2")
+
+// Version 3.0.0 is chosen to match the versions in use by Delivery+ as of May
+// 28, 2019:
+//
+// Ebean Plugin   3.0.0
+// Play           2.5.9
+// Ebean          6.18.1
+//
+// This table shows the relationship among the Ebean Plugin, Play, and Ebean
+// versions:
+//
+// https://github.com/playframework/play-ebean#releases
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-play-ebean" % "3.0.0")

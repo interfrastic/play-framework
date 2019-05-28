@@ -1,6 +1,7 @@
 package controllers;
 
 import javax.inject.*;
+import models.TestTable;
 import play.*;
 import play.mvc.*;
 
@@ -29,6 +30,13 @@ public class CountController extends Controller {
      * requests by an entry in the <code>routes</code> config file.
      */
     public Result count() {
+
+        // Add a row to the test table to confirm that Ebean is working.
+
+        TestTable testTable = new TestTable();
+
+        testTable.save();
+
         return ok(Integer.toString(counter.nextCount()));
     }
 

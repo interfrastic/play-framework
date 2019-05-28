@@ -8,3 +8,7 @@ target
 /RUNNING_PID
 /bin
 /libexec
+
+# Ignore Ebean ORM database evolutions.
+
+/conf/evolutions
