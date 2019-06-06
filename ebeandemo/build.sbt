@@ -14,11 +14,9 @@ libraryDependencies ++= Seq(
   javaWs
 )
 
-// Enable MySQL JDBC Datasource; note that "MySQL Connector/J 8.0 is highly
-// recommended for use with MySQL Server 8.0, 5.7, 5.6, and 5.5":
+// Enable MySQL JDBC Datasource
 //
-// https://dev.mysql.com/downloads/connector/j/#current
-//
-// As of May 28, 2019, Delivery+ uses MySQL 5.6.26.
+// Version 5.1.18 is chosen to match the versions in use by Delivery+ as of
+// May 28, 2019; see project/plugins.sbt for more information.
 
-libraryDependencies += "mysql" % "mysql-connector-java" % "8.0.16"
+libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.18"

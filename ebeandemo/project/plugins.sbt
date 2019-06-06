@@ -22,13 +22,18 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-play-enhancer" % "1.1.0")
 // Version 3.0.0 is chosen to match the versions in use by Delivery+ as of May
 // 28, 2019:
 //
-// Ebean Plugin   3.0.0
-// Play           2.5.9
-// Ebean          6.18.1
+// Ebean ORM              6.18.1
+// MySQL Connector/J      5.1.18
+// Play Framework         2.5.9
+// SBT Play Ebean Plugin  3.0.0
 //
 // This table shows the relationship among the Ebean Plugin, Play, and Ebean
 // versions:
 //
 // https://github.com/playframework/play-ebean#releases
+//
+// Here are notes on MySQL Connector/J version compatibility:
+//
+// https://dev.mysql.com/downloads/connector/j/#current
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-play-ebean" % "3.0.0")
