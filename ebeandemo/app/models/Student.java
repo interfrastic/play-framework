@@ -56,15 +56,14 @@ import javax.persistence.OneToOne;
  * }</pre>
  */
 @Entity
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "CanBeFinal"})
 public class Student extends CollegeModel {
 
     @ManyToOne // Default: optional = true
-    public final DormRoom dormRoom;
+    public DormRoom dormRoom;
 
     @OneToOne // Default: optional = true
-    public final ParkingSpace
-            parkingSpace;
+    public ParkingSpace parkingSpace;
 
     public Student(String name, DormRoom dormRoom, ParkingSpace parkingSpace) {
         super(name);

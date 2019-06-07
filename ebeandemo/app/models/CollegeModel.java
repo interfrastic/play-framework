@@ -10,14 +10,14 @@ import javax.persistence.MappedSuperclass;
  * demo.
  */
 @MappedSuperclass
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "CanBeFinal"})
 public class CollegeModel extends Model {
 
     @Id
     @GeneratedValue
     public int id;
 
-    public final String name;
+    public String name;
 
     public CollegeModel(String name) {
         this.name = name;
