@@ -1,7 +1,5 @@
 package controllers;
 
-import java.util.ArrayList;
-import java.util.List;
 import models.DormRoom;
 import models.ParkingSpace;
 import models.Student;
@@ -13,7 +11,6 @@ import views.html.index;
  * This controller contains an action to handle HTTP requests to the
  * application's home page.
  */
-@SuppressWarnings("WeakerAccess")
 public class HomeController extends Controller {
 
     /**
@@ -26,34 +23,31 @@ public class HomeController extends Controller {
 
         // Test out the relationships.
 
-        List<String> lines = new ArrayList<>();
-
         DormRoom dormRoom = new DormRoom("101");
 
-        lines.add("Created " + dormRoom);
-        lines.add(dormRoom.getDescription());
+        String message = "Created " + dormRoom + "\n\n"
+                + dormRoom.getDescription() + "\n\n";
 
         ParkingSpace parkingSpace = new ParkingSpace("A1");
 
-        lines.add(parkingSpace.getDescription());
+        message += "Crated " + parkingSpace + "\n\n"
+                + parkingSpace.getDescription() + "\n\n";
 
         Student student1 = new Student("Homer", dormRoom, parkingSpace);
 
-        lines.add("Created " + student1);
-        lines.add(student1.getDescription());
-
-        lines.add(dormRoom.getDescription());
-        lines.add(parkingSpace.getDescription());
+        message += "Created " + student1 + "\n\n"
+                + student1.getDescription() + "\n"
+                + dormRoom.getDescription() + "\n"
+                + parkingSpace.getDescription() + "\n\n";
 
         Student student2 = new Student("Marge", dormRoom, null);
 
-        lines.add("Created " + student2);
-        lines.add(student2.getDescription());
+        message += "Created " + student2 + "\n\n"
+                + student2.getDescription() + "\n"
+                + dormRoom.getDescription() + "\n"
+                + parkingSpace.getDescription();
 
-        lines.add(dormRoom.getDescription());
-        lines.add(parkingSpace.getDescription());
-
-        return ok(index.render(String.join("\n", lines)));
+        return ok(index.render(message));
     }
 
 }
