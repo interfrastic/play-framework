@@ -26,7 +26,7 @@ public class CollegeModel extends Model {
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + " " + name
-                + " (id = " + id + ")";
+                + " (id " + id + ")";
     }
 
 }

@@ -25,25 +25,29 @@ public class HomeController extends Controller {
 
         DormRoom dormRoom = new DormRoom("101");
 
-        String message = "Created " + dormRoom + "\n\n"
+        String message = "Created " + dormRoom + "\n"
                 + dormRoom.getDescription() + "\n\n";
 
         ParkingSpace parkingSpace = new ParkingSpace("A1");
 
-        message += "Crated " + parkingSpace + "\n\n"
+        message += "Created " + parkingSpace + "\n"
                 + parkingSpace.getDescription() + "\n\n";
 
         Student student1 = new Student("Homer", dormRoom, parkingSpace);
 
-        message += "Created " + student1 + "\n\n"
-                + student1.getDescription() + "\n"
+        message += "Created " + student1 + "\n"
+                + student1.getDescription() + "\n\n"
+
+                + "State of related objects:\n"
                 + dormRoom.getDescription() + "\n"
                 + parkingSpace.getDescription() + "\n\n";
 
         Student student2 = new Student("Marge", dormRoom, null);
 
-        message += "Created " + student2 + "\n\n"
-                + student2.getDescription() + "\n"
+        message += "Created " + student2 + "\n"
+                + student2.getDescription() + "\n\n"
+
+                + "State of related objects:\n"
                 + dormRoom.getDescription() + "\n"
                 + parkingSpace.getDescription();
 
