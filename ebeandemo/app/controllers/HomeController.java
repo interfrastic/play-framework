@@ -1,7 +1,9 @@
 package controllers;
 
+import java.util.Collections;
 import models.DormRoom;
 import models.ParkingSpace;
+import models.Scholarship;
 import models.Student;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -33,23 +35,33 @@ public class HomeController extends Controller {
         message += "Created " + parkingSpace + "\n"
                 + parkingSpace.getDescription() + "\n\n";
 
-        Student student1 = new Student("Homer", dormRoom, parkingSpace);
+        Scholarship scholarship = new Scholarship(
+                "Herschel Krustofsky Foundation");
+
+        message += "Created " + scholarship + "\n"
+                + scholarship.getDescription() + "\n\n";
+
+        Student student1 = new Student("Homer", dormRoom, parkingSpace,
+                Collections.singletonList(scholarship));
 
         message += "Created " + student1 + "\n"
                 + student1.getDescription() + "\n\n"
 
                 + "State of related objects:\n"
                 + dormRoom.getDescription() + "\n"
-                + parkingSpace.getDescription() + "\n\n";
+                + parkingSpace.getDescription() + "\n"
+                + scholarship.getDescription() + "\n\n";
 
-        Student student2 = new Student("Marge", dormRoom, null);
+        Student student2 = new Student("Marge", dormRoom, null,
+                Collections.singletonList(scholarship));
 
         message += "Created " + student2 + "\n"
                 + student2.getDescription() + "\n\n"
 
                 + "State of related objects:\n"
                 + dormRoom.getDescription() + "\n"
-                + parkingSpace.getDescription();
+                + parkingSpace.getDescription() + "\n"
+                + scholarship.getDescription() + "\n\n";
 
         return ok(index.render(message));
     }
