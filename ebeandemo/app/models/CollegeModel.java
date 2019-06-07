@@ -17,7 +17,7 @@ public class CollegeModel extends Model {
     @GeneratedValue
     public int id;
 
-    public String name;
+    public final String name;
 
     public CollegeModel(String name) {
         this.name = name;

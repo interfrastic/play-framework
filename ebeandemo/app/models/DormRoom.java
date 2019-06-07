@@ -39,12 +39,12 @@ import javax.persistence.OneToMany;
 public class DormRoom extends CollegeModel {
 
     @OneToMany(mappedBy = "dormRoom") // Default: optional = true
+    @SuppressWarnings("unused")
     public List<Student> students;
 
     public DormRoom(String name) {
         super(name);
         this.save();
-        System.out.println("Created " + this);
     }
 
     public String getDescription() {

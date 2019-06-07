@@ -42,12 +42,12 @@ import javax.persistence.OneToOne;
 public class ParkingSpace extends CollegeModel {
 
     @OneToOne(mappedBy = "parkingSpace") // Default: optional = true
+    @SuppressWarnings("unused")
     public Student student;
 
     public ParkingSpace(String name) {
         super(name);
         this.save();
-        System.out.println("Created " + this);
     }
 
     public String getDescription() {

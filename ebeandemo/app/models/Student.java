@@ -60,10 +60,10 @@ import javax.persistence.OneToOne;
 public class Student extends CollegeModel {
 
     @ManyToOne // Default: optional = true
-    public DormRoom dormRoom;
+    public final DormRoom dormRoom;
 
     @OneToOne // Default: optional = true
-    public ParkingSpace
+    public final ParkingSpace
             parkingSpace;
 
     public Student(String name, DormRoom dormRoom, ParkingSpace parkingSpace) {
@@ -79,8 +79,6 @@ public class Student extends CollegeModel {
         if (this.parkingSpace != null) {
             this.parkingSpace.refresh();
         }
-
-        System.out.println("Created " + this);
     }
 
     public String getDescription() {
