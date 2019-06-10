@@ -16,7 +16,9 @@ import javax.validation.constraints.NotNull;
  * Each student has 0 - 1 dorm rooms (students may live off campus)
  *
  * +---------------------------------+       +---------------------------------+
+ * |                                 |       |                                 |
  * | DormRoom                        |O|---O<| Student                         |
+ * |                                 |       |                                 |
  * +---------------------------------+       +---------------------------------+
  *
  * @OneToMany(mappedBy = "dormRoom")         @ManyToOne
@@ -35,7 +37,9 @@ import javax.validation.constraints.NotNull;
  * Each student has 0 - 1 parking spaces (limit 1 space per student)
  *
  * +---------------------------------+       +---------------------------------+
+ * |                                 |       |                                 |
  * | ParkingSpace                    |O|---|O| Student                         |
+ * |                                 |       |                                 |
  * +---------------------------------+       +---------------------------------+
  *
  * @OneToOne(mappedBy                        @OneToOne
@@ -58,7 +62,9 @@ import javax.validation.constraints.NotNull;
  * Each student has 0 - N scholarships
  *
  * +---------------------------------+       +---------------------------------+
+ * |                                 |       |                                 |
  * | Scholarship                     |>O---O<| Student                         |
+ * |                                 |       |                                 |
  * +---------------------------------+       +---------------------------------+
  *
  * @ManyToMany(mappedBy                      @ManyToMany
@@ -104,7 +110,7 @@ import javax.validation.constraints.NotNull;
  * }</pre>
  */
 @Entity
-@SuppressWarnings({"WeakerAccess", "CanBeFinal"})
+@SuppressWarnings({"WeakerAccess", "CanBeFinal", "unused"})
 public class Student extends CollegeModel {
 
     @ManyToOne // Default: optional = true.
@@ -113,7 +119,7 @@ public class Student extends CollegeModel {
     @OneToOne // Default: optional = true.
     public ParkingSpace parkingSpace;
 
-    @ManyToMany // Default: optional = true.
+    @ManyToMany
     public List<Scholarship> scholarships;
 
     public Student(String name, DormRoom dormRoom, ParkingSpace parkingSpace,

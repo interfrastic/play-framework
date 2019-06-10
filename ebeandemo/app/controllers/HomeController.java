@@ -1,6 +1,8 @@
 package controllers;
 
 import java.util.Collections;
+import models.Dorm;
+import models.DormFloor;
 import models.DormRoom;
 import models.ParkingSpace;
 import models.Scholarship;
@@ -25,10 +27,26 @@ public class HomeController extends Controller {
 
         // Test out the relationships.
 
-        DormRoom dormRoom = new DormRoom("101");
+        Dorm dorm = new Dorm("Quimby Hall");
 
-        String message = "Created " + dormRoom + "\n"
-                + dormRoom.getDescription() + "\n\n";
+        String message = "Created " + dorm + "\n"
+                + dorm.getDescription() + "\n\n";
+
+        DormFloor dormFloor = new DormFloor("1", dorm);
+
+        message += "Created " + dormFloor + "\n"
+                + dormFloor.getDescription() + "\n\n"
+
+                + "State of related objects:\n"
+                + dorm.getDescription() + "\n\n";
+
+        DormRoom dormRoom = new DormRoom("101", dormFloor);
+
+        message += "Created " + dormRoom + "\n"
+                + dormRoom.getDescription() + "\n\n"
+
+                + "State of related objects:\n"
+                + dormFloor.getDescription() + "\n\n";
 
         ParkingSpace parkingSpace = new ParkingSpace("A1");
 

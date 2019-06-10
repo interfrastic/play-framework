@@ -10,7 +10,9 @@ import javax.persistence.OneToOne;
  * Each student has 0 - 1 parking spaces (limit 1 space per student)
  *
  * +---------------------------------+       +---------------------------------+
+ * |                                 |       |                                 |
  * | ParkingSpace                    |O|---|O| Student                         |
+ * |                                 |       |                                 |
  * +---------------------------------+       +---------------------------------+
  *
  * @OneToOne(mappedBy                        @OneToOne
@@ -42,11 +44,10 @@ import javax.persistence.OneToOne;
  * }</pre>
  */
 @Entity
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "CanBeFinal", "unused"})
 public class ParkingSpace extends CollegeModel {
 
     @OneToOne(mappedBy = "parkingSpace") // Default: optional = true.
-    @SuppressWarnings("unused")
     public Student student;
 
     public ParkingSpace(String name) {

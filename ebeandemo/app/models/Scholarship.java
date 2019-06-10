@@ -13,7 +13,9 @@ import javax.persistence.ManyToMany;
  * Each student has 0 - N scholarships
  *
  * +---------------------------------+       +---------------------------------+
+ * |                                 |       |                                 |
  * | Scholarship                     |>O---O<| Student                         |
+ * |                                 |       |                                 |
  * +---------------------------------+       +---------------------------------+
  *
  * @ManyToMany(mappedBy                      @ManyToMany
@@ -55,11 +57,10 @@ import javax.persistence.ManyToMany;
  * }</pre>
  */
 @Entity
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "CanBeFinal", "unused"})
 public class Scholarship extends CollegeModel {
 
-    @ManyToMany(mappedBy = "scholarships") // Default: optional = true.
-    @SuppressWarnings("unused")
+    @ManyToMany(mappedBy = "scholarships")
     public List<Student> students;
 
     public Scholarship(String name) {
