@@ -1,7 +1,6 @@
 package models;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -10,7 +9,9 @@ import javax.validation.constraints.NotNull;
 /**
  * Demonstrate the following relationships in the Ebean ORM:
  * <pre>{@code
- * Each dorm floor has 0 - N dorm rooms
+ * 1 TO 0 - N RELATIONSHIP
+ *
+ * Each dorm floor has 0 - N dorm rooms (a floor might have no assignable rooms)
  * Each dorm room has exactly 1 dorm floor
  *
  * +---------------------------------+       +---------------------------------+
@@ -34,8 +35,10 @@ import javax.validation.constraints.NotNull;
  * the new column, making it impossible to insert a row representing a dorm room
  * that does not have a dorm floor.
  * <pre>{@code
- * Each dorm room has 0 - N students
- * Each student has 0 - 1 dorm rooms (students may live off campus)
+ * 0 - 1 TO 0 - N RELATIONSHIP
+ *
+ * Each dorm room has 0 - N students (a room might not be assigned)
+ * Each student has 0 - 1 dorm rooms (a student might live off campus)
  *
  * +---------------------------------+       +---------------------------------+
  * |                                 |       |                                 |
@@ -71,7 +74,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @SuppressWarnings({"WeakerAccess", "CanBeFinal", "unused"})
-public class DormRoom extends CollegeModel {
+public class DormRoom extends DemoModel {
 
     @ManyToOne(optional = false)
     public DormFloor dormFloor;
@@ -79,27 +82,19 @@ public class DormRoom extends CollegeModel {
     @OneToMany(mappedBy = "dormRoom")
     public List<Student> students;
 
-    public DormRoom(String name, @NotNull DormFloor dormFloor) {
+    public DormRoom(@NotNull String name, @NotNull DormFloor dormFloor) {
         super(name);
         this.dormFloor = dormFloor;
         this.save();
         this.dormFloor.refresh();
     }
 
+    @Override
+    @NotNull
     public String getDescription() {
-        StringBuilder sb = new StringBuilder(this.toString());
-
-        sb.append(" has ").append(dormFloor).append(", ");
-
-        if (students.isEmpty()) {
-            sb.append("no ").append(Student.class.getSimpleName())
-                    .append(" objects");
-        } else {
-            sb.append(students.stream().map(Object::toString)
-                    .collect(Collectors.joining(", ")));
-        }
-
-        return sb.toString();
+        return getDescriptionFromProperties(
+                DemoModel.objectToString(DormFloor.class, dormFloor),
+                DemoModel.objectsToString(Student.class, students));
     }
 
 }

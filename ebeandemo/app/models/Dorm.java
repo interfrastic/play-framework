@@ -1,33 +1,16 @@
 package models;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 /**
  * Demonstrate the following relationships in the Ebean ORM:
  * <pre>{@code
- * Each dorm has 1 - N dorm floors
- * Each dorm floor has exactly 1 dorm
+ * 1 TO 0 - N RELATIONSHIP
  *
- * +---------------------------------+       +---------------------------------+
- * |                                 |       |                                 |
- * | Dorm                            |||---|<| DormFloor                       |
- * |                                 |       |                                 |
- * +---------------------------------+       +---------------------------------+
- *
- * @OneToMany(mappedBy = "dorm")             @ManyToOne
- *     optional = false)  // ERROR!          public Dorm dorm;
- * public List<DormFloor> dormFloors;
- * }</pre>
- * It is currently impossible to implement the relationship above in the Ebean
- * ORM because {@code @oneToMany} does not support {@code optional = false}.
- * <p>
- * This is the actual implementation, which technically allows a dorm with no
- * floors:
- * <pre>{@code
- * Each dorm has 0 - N dorm floors
+ * Each dorm has 0 - N dorm floors (see note below)
  * Each dorm floor has exactly 1 dorm
  *
  * +---------------------------------+       +---------------------------------+
@@ -36,9 +19,14 @@ import javax.persistence.OneToMany;
  * |                                 |       |                                 |
  * +---------------------------------+       +---------------------------------+
  *
- * @OneToMany(mappedBy = "dorm")             @ManyToOne
+ * @OneToMany(mappedBy = "dorm")             @ManyToOne(optional = false)
  * public List<DormFloor> dormFloors;        public Dorm dorm;
  * }</pre>
+ * <strong>Note:</strong> It seems more logical to say that each dorm has 1 - N
+ * dorm floors, but the Ebean ORM does not support this type of relationship;
+ * see the file {@code README.md} in the root directory of this project for
+ * further discussion of the standard relationships that cannot be modeled.
+ * <p>
  * The presence of {@code mappedBy} marks this side of the <!--              -->
  * {@code @OneToMany}/{@code @ManyToOne} relationship as the inverse
  * (non-owning) side. The other side of this relationship (the one without
@@ -63,30 +51,21 @@ import javax.persistence.OneToMany;
  */
 @Entity
 @SuppressWarnings({"WeakerAccess", "CanBeFinal", "unused"})
-public class Dorm extends CollegeModel {
+public class Dorm extends DemoModel {
 
     @OneToMany(mappedBy = "dorm")
     public List<DormFloor> dormFloors;
 
-    public Dorm(String name) {
+    public Dorm(@NotNull String name) {
         super(name);
         this.save();
     }
 
+    @Override
+    @NotNull
     public String getDescription() {
-        StringBuilder sb = new StringBuilder(this.toString());
-
-        sb.append(" has ");
-
-        if (dormFloors.size() > 0) {
-            sb.append(dormFloors.stream().map(Object::toString)
-                    .collect(Collectors.joining(", ")));
-        } else {
-            sb.append("no ").append(DormFloor.class.getSimpleName())
-                    .append(" objects");
-        }
-
-        return sb.toString();
+        return getDescriptionFromProperties(
+                DemoModel.objectsToString(DormFloor.class, dormFloors));
     }
 
 }

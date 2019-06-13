@@ -4,10 +4,17 @@ This project demonstrates how each of the basic relationships possible
 between two entities is represented in the Ebean ORM and how these
 relationships are mapped to tables in a MySQL database.
 
+## Project creation
+
 The initial project was created by following
 [these instructions](https://www.playframework.com/documentation/2.5.9/NewApplication)
 to create a new vanilla Play Java application, like this:
-    
+
 ```
 activator new ebeandemo play-java
 ```
+
+## Impossible relationships
+
+TODO: Discuss standard entity relationships that can’t be modeled in the
+Ebean ORM.
