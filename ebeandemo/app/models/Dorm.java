@@ -44,7 +44,7 @@ import javax.validation.constraints.NotNull;
  * | Field | Type         | Null | Key | Default | Extra          |
  * +-------+--------------+------+-----+---------+----------------+
  * | id    | int(11)      | NO   | PRI | NULL    | auto_increment |
- * | name  | varchar(255) | YES  |     | NULL    |                |
+ * | name  | varchar(255) | NO   |     | NULL    |                |
  * +-------+--------------+------+-----+---------+----------------+
  * 2 rows in set (0.00 sec)
  *
