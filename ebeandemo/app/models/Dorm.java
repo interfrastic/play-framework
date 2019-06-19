@@ -1,5 +1,6 @@
 package models;
 
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -63,9 +64,9 @@ public class Dorm extends DemoModel {
 
     @Override
     @NotNull
-    public String getDescription() {
-        return getDescriptionFromProperties(
-                DemoModel.objectsToString(DormFloor.class, dormFloors));
+    public String getObjectDescription() {
+        return getObjectDescriptionFromStrings(Collections.singletonList(
+                DemoModel.objectsToString(DormFloor.class, dormFloors)));
     }
 
 }

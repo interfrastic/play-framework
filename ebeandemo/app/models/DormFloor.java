@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -126,11 +128,18 @@ public class DormFloor extends DemoModel {
 
     @Override
     @NotNull
-    public String getDescription() {
-        return getDescriptionFromProperties(
+    public String getObjectDescription() {
+        return getObjectDescriptionFromStrings(Arrays.asList(
                 DemoModel.objectToString(Dorm.class, dorm),
                 DemoModel.objectToString(DormLounge.class, dormLounge),
-                DemoModel.objectsToString(DormRoom.class, dormRooms));
+                DemoModel.objectsToString(DormRoom.class, dormRooms)));
+    }
+
+    @Override
+    @NotNull
+    public String getRelatedObjectsDescription() {
+        return getRelatedObjectsDescriptionFromStrings(
+                Collections.singletonList(dorm.getObjectDescription()));
     }
 
 }

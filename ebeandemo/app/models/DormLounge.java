@@ -1,6 +1,9 @@
 package models;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
@@ -143,11 +146,20 @@ public class DormLounge extends DemoModel {
 
     @Override
     @NotNull
-    public String getDescription() {
-        return getDescriptionFromProperties(
+    public String getObjectDescription() {
+        return getObjectDescriptionFromStrings(Arrays.asList(
                 DemoModel.objectToString(DormFloor.class, dormFloor),
                 DemoModel.objectsToString(StudyGroup.class, studyGroups),
-                DemoModel.objectToString(Television.class, television));
+                DemoModel.objectToString(Television.class, television)));
+    }
+
+    @Override
+    @NotNull
+    public String getRelatedObjectsDescription() {
+        return getRelatedObjectsDescriptionFromStrings(Stream.concat(
+                Stream.of(dormFloor.getObjectDescription()),
+                studyGroups.stream().map(StudyGroup::getObjectDescription))
+                .collect(Collectors.toList()));
     }
 
 }

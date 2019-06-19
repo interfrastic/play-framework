@@ -1,6 +1,8 @@
 package models;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
@@ -111,10 +113,18 @@ public class StudyGroup extends DemoModel {
 
     @Override
     @NotNull
-    public String getDescription() {
-        return getDescriptionFromProperties(
+    public String getObjectDescription() {
+        return getObjectDescriptionFromStrings(Arrays.asList(
                 DemoModel.objectsToString(DormLounge.class, dormLounges),
-                DemoModel.objectsToString(Student.class, students));
+                DemoModel.objectsToString(Student.class, students)));
+    }
+
+    @Override
+    @NotNull
+    public String getRelatedObjectsDescription() {
+        return getRelatedObjectsDescriptionFromStrings(
+                students.stream().map(Student::getObjectDescription)
+                        .collect(Collectors.toList()));
     }
 
 }

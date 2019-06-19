@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
@@ -28,13 +29,6 @@ public class DemoModel extends Model {
     }
 
     @NotNull
-    static <T> String objectToString(@NotNull Class<T> type,
-            @Nullable T object) {
-        return (object == null) ? "no " + type.getSimpleName() + " object"
-                : object.toString();
-    }
-
-    @NotNull
     static <T> String objectsToString(@NotNull Class<T> type,
             @NotNull List<T> objects) {
         return objects.isEmpty() ? "no " + type.getSimpleName() + " objects"
@@ -43,15 +37,41 @@ public class DemoModel extends Model {
     }
 
     @NotNull
-    public String getDescription() {
-        return getDescriptionFromProperties();
+    static <T> String objectToString(@NotNull Class<T> type,
+            @Nullable T object) {
+        return (object == null) ? "no " + type.getSimpleName() + " object"
+                : object.toString();
     }
 
     @NotNull
-    String getDescriptionFromProperties(@NotNull String... properties) {
+    public String getDescription() {
+        return String.join("\n\n", getObjectDescription(),
+                getRelatedObjectsDescription());
+    }
+
+    @NotNull
+    String getObjectDescription() {
+        return getObjectDescriptionFromStrings(Collections.emptyList());
+    }
+
+    @NotNull
+    String getObjectDescriptionFromStrings(@NotNull List<String> strings) {
         return this + " has "
-                + ((properties.length == 0) ? "no properties"
-                : String.join(", ", properties));
+                + (strings.isEmpty() ? "no properties"
+                : String.join(", ", strings));
+    }
+
+    @NotNull
+    String getRelatedObjectsDescription() {
+        return getRelatedObjectsDescriptionFromStrings(Collections.emptyList());
+    }
+
+    @NotNull
+    String getRelatedObjectsDescriptionFromStrings(
+            @NotNull List<String> strings) {
+        return "\t" + (strings.isEmpty() ? "No related objects"
+                : "State of related objects:\n\t"
+                        + String.join("\n\t", strings));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package models;
 
+import java.util.Collections;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
@@ -68,9 +69,18 @@ public class Television extends DemoModel {
 
     @Override
     @NotNull
-    public String getDescription() {
-        return getDescriptionFromProperties(
-                DemoModel.objectToString(DormLounge.class, dormLounge));
+    public String getObjectDescription() {
+        return getObjectDescriptionFromStrings(Collections.singletonList(
+                DemoModel.objectToString(DormLounge.class, dormLounge)));
+    }
+
+    @Override
+    @NotNull
+    public String getRelatedObjectsDescription() {
+        return (dormLounge == null) ? super.getRelatedObjectsDescription()
+                : getRelatedObjectsDescriptionFromStrings(
+                        Collections.singletonList(
+                                dormLounge.getObjectDescription()));
     }
 
 }
