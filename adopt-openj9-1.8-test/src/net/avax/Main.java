@@ -21,8 +21,8 @@ public class Main {
 
         List<NameValuePair> params = new ArrayList<>();
 
-        params.add(new BasicNameValuePair("username", "Homer Simpson"));
-        params.add(new BasicNameValuePair("password", "super+secret"));
+        params.add(new BasicNameValuePair("username", "Sinéad O'Connor"));
+        params.add(new BasicNameValuePair("password", "lion+cobra"));
 
         String httpPostBody = URLEncodedUtils.format(params,
                 DEF_CONTENT_CHARSET);
